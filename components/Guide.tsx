@@ -41,7 +41,7 @@ export default function Guide() {
               Experience the future of software engineering. Redeem your code to unlock premium capabilities.
             </p>
             <Link 
-              href="#redeem" 
+              href="https://trae.ai" 
               className="inline-flex items-center justify-center px-8 py-4 bg-white text-black font-semibold text-lg hover:bg-gray-200 transition-all rounded-none uppercase tracking-wide"
             >
               Get Started

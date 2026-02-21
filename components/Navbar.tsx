@@ -47,7 +47,7 @@ export default function Navbar() {
           {/* Right Actions */}
           <div className="hidden md:flex items-center space-x-4">
             <Link 
-              href="#redeem" 
+              href="https://trae.ai" 
               className="bg-[#32F08C] text-black hover:bg-[#2bd97c] px-6 py-2.5 rounded-none text-sm font-semibold transition-all duration-200 uppercase tracking-wide"
             >
               Download
@@ -92,7 +92,7 @@ export default function Navbar() {
               ))}
               <div className="pt-4 flex flex-col gap-4">
                 <Link
-                  href="#redeem"
+                  href="https://trae.ai"
                   onClick={() => setIsOpen(false)}
                   className="w-full text-center block bg-[#32F08C] text-black hover:bg-[#2bd97c] px-3 py-3 rounded-none text-base font-semibold uppercase"
                 >

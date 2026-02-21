@@ -46,15 +46,18 @@ export default function Hero() {
             className="flex flex-col sm:flex-row gap-4"
           >
             <Link 
-              href="#redeem" 
+              href="https://trae.ai" 
               className="inline-flex items-center justify-center px-6 py-2.5 bg-[#32F08C] text-black font-semibold text-sm hover:bg-[#2bd97c] transition-all rounded-none uppercase tracking-wide gap-2 group"
             >
               <Zap className="w-5 h-5 fill-current" />
               Download TRAE
             </Link>
-            <button className="inline-flex items-center justify-center px-6 py-2.5 bg-transparent border border-white/20 text-white font-semibold text-sm hover:bg-white/10 transition-all rounded-none uppercase tracking-wide gap-2">
+            <Link 
+              href="https://trae.ai" 
+              className="inline-flex items-center justify-center px-6 py-2.5 bg-transparent border border-white/20 text-white font-semibold text-sm hover:bg-white/10 transition-all rounded-none uppercase tracking-wide gap-2"
+            >
               Explore SOLO
-            </button>
+            </Link>
             </motion.div>
             
 
