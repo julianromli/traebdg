@@ -3,23 +3,54 @@
 :root {
   --background: #000000;
   --foreground: #FFFFFF;
-  --accent: #32F08C;
+  --accent: #32F08C; /* Trae Green */
+  --accent-hover: #2bd97c;
+  --muted: #111111;
+  --muted-foreground: #888888;
+  --border: #222222;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-jetbrains-mono);
+  --color-accent-hover: var(--accent-hover);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
+/* Base Styles */
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  antialiased: true;
 }
 
-html {
-  scroll-behavior: smooth;
+/* Custom Utilities for Trae Aesthetics */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* Rectangular Utility - Enforce Sharp Corners */
+  .sharp {
+    border-radius: 0px !important;
+  }
+}
+
+/* Dot Matrix Background Pattern */
+.bg-dot-pattern {
+  background-image: radial-gradient(rgba(50, 240, 140, 0.2) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Selection Color */
+::selection {
+  background-color: var(--accent);
+  color: black;
 }

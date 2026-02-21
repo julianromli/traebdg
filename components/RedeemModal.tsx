@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle, AlertCircle, Copy } from 'lucide-react';
+import { X, Check, Copy } from 'lucide-react';
 
 interface RedeemModalProps {
   isOpen: boolean;
   onClose: () => void;
-  code?: string; // Optional code to display if success
+  code?: string;
 }
 
 export default function RedeemModal({ isOpen, onClose, code }: RedeemModalProps) {
@@ -21,104 +21,89 @@ export default function RedeemModal({ isOpen, onClose, code }: RedeemModalProps)
     }
   };
 
+  if (!isOpen) return null;
+
   return (
     <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            key="backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      >
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.95, opacity: 0 }}
+          onClick={(e) => e.stopPropagation()}
+          className="w-full max-w-lg bg-black border border-white/20 shadow-2xl relative"
+        >
+          {/* Header */}
+          <div className="flex justify-between items-center p-6 border-b border-white/10">
+            <h3 className="text-xl font-semibold text-white uppercase tracking-wider flex items-center gap-3">
+              <span className="w-2 h-2 bg-[#32F08C]"></span>
+              Redeem Successful
+            </h3>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-white transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
 
-          {/* Modal Content */}
-          <motion.div
-            key="modal-content"
-            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed z-50 w-full max-w-md bg-[#111] border border-white/10 rounded-2xl shadow-2xl overflow-hidden top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-          >
-            {/* Header */}
-            <div className="flex justify-between items-center p-6 border-b border-white/5 bg-gradient-to-r from-gray-900 to-black">
-              <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#32F08C] animate-pulse"></span>
-                Redeem Berhasil!
-              </h3>
+          {/* Body */}
+          <div className="p-8 space-y-8">
+            <div className="space-y-4">
+              <h4 className="text-3xl font-semibold text-white">Congratulations!</h4>
+              <p className="text-gray-400">
+                Your code has been successfully claimed. Use the code below to access premium features.
+              </p>
+            </div>
+
+            {/* Code Display */}
+            <div className="bg-[#0A0A0A] border border-white/10 p-6 flex items-center justify-between gap-4 group hover:border-[#32F08C]/50 transition-colors">
+              <code className="text-[#32F08C] font-mono text-2xl font-semibold tracking-widest">
+                {code || 'TRAE-BDG-2024'}
+              </code>
               <button
-                onClick={onClose}
-                className="text-gray-400 hover:text-white transition-colors p-1 rounded-full hover:bg-white/10"
+                onClick={handleCopy}
+                className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors uppercase text-sm font-semibold tracking-wider"
               >
-                <X className="w-5 h-5" />
+                {copied ? (
+                  <>
+                    <Check className="w-4 h-4 text-[#32F08C]" />
+                    Copied
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    Copy
+                  </>
+                )}
               </button>
             </div>
 
-            {/* Body */}
-            <div className="p-8 text-center space-y-6">
-              <div className="mx-auto w-20 h-20 bg-[#32F08C]/10 rounded-full flex items-center justify-center mb-4 ring-1 ring-[#32F08C]/30 shadow-[0_0_30px_rgba(50,240,140,0.2)]">
-                <CheckCircle className="w-10 h-10 text-[#32F08C]" />
-              </div>
-              
-              <div className="space-y-2">
-                <h4 className="text-2xl font-bold text-white">Selamat!</h4>
-                <p className="text-gray-400">
-                  Kode redeem Anda telah berhasil diklaim. Gunakan kode di bawah ini untuk mengakses fitur premium.
-                </p>
-              </div>
-
-              {/* Code Display */}
-              <div className="bg-black border border-dashed border-gray-700 rounded-xl p-4 flex items-center justify-between gap-4 group hover:border-[#32F08C]/50 transition-colors">
-                <code className="text-[#32F08C] font-mono text-xl font-bold tracking-wider">
-                  {code || 'TRAE-BDG-2024'}
-                </code>
-                <button
-                  onClick={handleCopy}
-                  className="p-2 text-gray-400 hover:text-white transition-colors relative"
-                  title="Salin Kode"
-                >
-                  {copied ? (
-                    <CheckCircle className="w-5 h-5 text-[#32F08C]" />
-                  ) : (
-                    <Copy className="w-5 h-5 group-hover:text-[#32F08C]" />
-                  )}
-                  {copied && (
-                    <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-[#32F08C] text-black text-xs font-bold px-2 py-1 rounded shadow-lg whitespace-nowrap">
-                      Tersalin!
-                    </span>
-                  )}
-                </button>
-              </div>
-
-              <div className="text-xs text-gray-500 mt-4">
-                *Kode berlaku selama 24 jam setelah diklaim.
-              </div>
-            </div>
-
-            {/* Footer */}
-            <div className="p-6 border-t border-white/5 bg-gray-900/50 flex gap-3">
+            <div className="grid grid-cols-2 gap-4 pt-4">
               <button 
                 onClick={onClose}
-                className="flex-1 px-4 py-3 bg-white/5 hover:bg-white/10 text-white font-medium rounded-xl transition-colors"
+                className="px-6 py-4 bg-transparent border border-white/20 hover:bg-white/5 text-white font-semibold uppercase tracking-wider transition-colors"
               >
-                Tutup
+                Close
               </button>
               <a 
                 href="https://www.trae.ai/pricing"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 px-4 py-3 bg-[#32F08C] hover:bg-[#2bd97c] text-black font-bold rounded-xl transition-colors shadow-lg shadow-[#32F08C]/20 flex items-center justify-center"
+                className="px-6 py-4 bg-[#32F08C] hover:bg-[#2bd97c] text-black font-semibold uppercase tracking-wider transition-colors text-center flex items-center justify-center"
               >
-                Gunakan Sekarang
+                Use Now
               </a>
             </div>
-          </motion.div>
-        </>
-      )}
+          </div>
+        </motion.div>
+      </motion.div>
     </AnimatePresence>
   );
 }

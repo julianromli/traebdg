@@ -1,15 +1,15 @@
 import { z } from "zod";
 
 export const redeemSchema = z.object({
-  fullName: z.string().min(3, "Nama lengkap minimal 3 karakter"),
-  email: z.string().email("Format email tidak valid"),
-  whatsapp: z.string().min(10, "Nomor WhatsApp tidak valid").regex(/^(\+62|62|0)8[1-9][0-9]{6,9}$/, "Format nomor WhatsApp tidak valid (contoh: 08123456789)"),
+  fullName: z.string().min(3, "Full name must be at least 3 characters"),
+  email: z.string().email("Invalid email format"),
+  whatsapp: z.string().min(10, "Invalid WhatsApp number").regex(/^(\+62|62|0)8[1-9][0-9]{6,9}$/, "Invalid WhatsApp format (e.g. 08123456789)"),
   background: z.enum(["IT", "Non-IT"], {
-    errorMap: () => ({ message: "Pilih latar belakang Anda" }),
+    message: "Select your background",
   }),
   itRole: z.string().optional(),
   usedTrae: z.enum(["YES", "NO"], {
-    errorMap: () => ({ message: "Pilih status penggunaan TRAE" }),
+    message: "Select your TRAE usage status",
   }),
 }).refine((data) => {
   if (data.background === "IT" && !data.itRole) {
@@ -17,7 +17,7 @@ export const redeemSchema = z.object({
   }
   return true;
 }, {
-  message: "Pilih role IT Anda",
+  message: "Please specify your IT role",
   path: ["itRole"],
 });
 

@@ -6,10 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { redeemSchema, RedeemFormValues } from '@/lib/validations';
 import { redeemCode } from '@/app/actions';
 import RedeemModal from './RedeemModal';
-import { Loader2, AlertCircle } from 'lucide-react';
-import { cn } from '@/lib/utils'; // Assuming this exists or I should use clsx/tailwind-merge directly if not.
-// Checking package.json, clsx and tailwind-merge are installed. 
-// I'll check if lib/utils.ts exists.
+import { Loader2, AlertCircle, Check } from 'lucide-react';
 
 export default function RedeemForm() {
   const [state, dispatch, isPending] = useActionState(redeemCode, {
@@ -33,6 +30,7 @@ export default function RedeemForm() {
 
   const [showModal, setShowModal] = useState(false);
   const background = watch('background');
+  const usedTrae = watch('usedTrae');
 
   useEffect(() => {
     if (state.success) {
@@ -41,18 +39,10 @@ export default function RedeemForm() {
   }, [state.success]);
 
   const onSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
-    // This is the correct way to wrap RHF with server actions that need FormData
-    // We prevent default first
     evt.preventDefault();
-    
-    // We call handleSubmit, which runs validation
-    // If valid, it runs our callback. 
-    // BUT we need the original event target (the form) to create FormData reliably
-    // because data object might miss unchecked checkboxes or file inputs not managed by RHF
     const form = evt.currentTarget;
     
     handleSubmit(async (data) => {
-      // Validation passed
       const formData = new FormData(form);
       startTransition(() => {
         dispatch(formData);
@@ -70,182 +60,154 @@ export default function RedeemForm() {
       
       <form 
         onSubmit={onSubmit}
-        className="space-y-6 bg-[#111] p-8 rounded-2xl border border-white/10 shadow-xl max-w-xl mx-auto"
+        className="space-y-8 bg-black p-8 md:p-12 border border-white/10 max-w-2xl mx-auto relative overflow-hidden"
       >
-        <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-white">Dapatkan Kode Redeem</h2>
-          <p className="text-gray-400 text-sm">Isi formulir di bawah ini untuk mendapatkan akses premium.</p>
+        {/* Decorative Corner */}
+        <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#32F08C]/10 to-transparent pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-2 h-2 bg-[#32F08C]"></div>
+
+        <div className="space-y-4">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white tracking-tight leading-tight">Get Your Redeem Code</h2>
+          <p className="text-gray-400">Fill out the form below to get premium access.</p>
         </div>
 
         {/* Global Error Message */}
         {!state.success && state.message && (
-          <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 flex items-start gap-3">
+          <div className="bg-red-900/20 border border-red-500/50 p-4 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
             <p className="text-sm text-red-400">{state.message}</p>
           </div>
         )}
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {/* Full Name */}
           <div className="space-y-2">
-            <label htmlFor="fullName" className="text-sm font-medium text-gray-300">
-              Nama Lengkap
+            <label htmlFor="fullName" className="text-sm font-semibold text-white uppercase tracking-wider">
+              Full Name
             </label>
             <input
               id="fullName"
               {...register('fullName')}
-              className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#32F08C] focus:ring-1 focus:ring-[#32F08C] transition-colors"
-              placeholder="Masukkan nama lengkap Anda"
+              className="w-full bg-transparent border border-white/20 px-4 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#32F08C] focus:ring-1 focus:ring-[#32F08C] transition-all rounded-none"
+              placeholder="ENTER YOUR FULL NAME"
             />
             {formErrors.fullName && (
-              <p className="text-xs text-red-400">{formErrors.fullName.message}</p>
-            )}
-            {state.errors?.fullName && (
-              <p className="text-xs text-red-400">{state.errors.fullName[0]}</p>
+              <p className="text-xs text-red-400 font-mono">{formErrors.fullName.message}</p>
             )}
           </div>
 
           {/* Email */}
           <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium text-gray-300">
+            <label htmlFor="email" className="text-sm font-semibold text-white uppercase tracking-wider">
               Email Address
             </label>
             <input
               id="email"
               type="email"
               {...register('email')}
-              className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#32F08C] focus:ring-1 focus:ring-[#32F08C] transition-colors"
-              placeholder="nama@email.com"
+              className="w-full bg-transparent border border-white/20 px-4 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#32F08C] focus:ring-1 focus:ring-[#32F08C] transition-all rounded-none"
+              placeholder="NAME@EMAIL.COM"
             />
             {formErrors.email && (
-              <p className="text-xs text-red-400">{formErrors.email.message}</p>
-            )}
-            {state.errors?.email && (
-              <p className="text-xs text-red-400">{state.errors.email[0]}</p>
+              <p className="text-xs text-red-400 font-mono">{formErrors.email.message}</p>
             )}
           </div>
 
           {/* WhatsApp */}
           <div className="space-y-2">
-            <label htmlFor="whatsapp" className="text-sm font-medium text-gray-300">
-              Nomor WhatsApp
+            <label htmlFor="whatsapp" className="text-sm font-semibold text-white uppercase tracking-wider">
+              WhatsApp Number
             </label>
             <input
               id="whatsapp"
               {...register('whatsapp')}
-              className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#32F08C] focus:ring-1 focus:ring-[#32F08C] transition-colors"
+              className="w-full bg-transparent border border-white/20 px-4 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#32F08C] focus:ring-1 focus:ring-[#32F08C] transition-all rounded-none"
               placeholder="08123456789"
             />
             {formErrors.whatsapp && (
-              <p className="text-xs text-red-400">{formErrors.whatsapp.message}</p>
-            )}
-            {state.errors?.whatsapp && (
-              <p className="text-xs text-red-400">{state.errors.whatsapp[0]}</p>
+              <p className="text-xs text-red-400 font-mono">{formErrors.whatsapp.message}</p>
             )}
           </div>
 
           {/* Background */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300">
-              Latar Belakang
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-white uppercase tracking-wider">
+              Background
             </label>
             <div className="grid grid-cols-2 gap-4">
-              <label className="cursor-pointer">
-                <input
-                  type="radio"
-                  value="IT"
-                  {...register('background')}
-                  className="peer sr-only"
-                />
-                <div className="flex items-center justify-center px-4 py-3 bg-black/50 border border-white/10 rounded-lg text-gray-400 peer-checked:bg-[#32F08C]/10 peer-checked:border-[#32F08C] peer-checked:text-[#32F08C] transition-all hover:bg-white/5">
-                  IT / Tech
-                </div>
-              </label>
-              <label className="cursor-pointer">
-                <input
-                  type="radio"
-                  value="Non-IT"
-                  {...register('background')}
-                  className="peer sr-only"
-                />
-                <div className="flex items-center justify-center px-4 py-3 bg-black/50 border border-white/10 rounded-lg text-gray-400 peer-checked:bg-[#32F08C]/10 peer-checked:border-[#32F08C] peer-checked:text-[#32F08C] transition-all hover:bg-white/5">
-                  Non-IT
-                </div>
-              </label>
+              {['IT', 'Non-IT'].map((val) => (
+                <label key={val} className="cursor-pointer group relative">
+                  <input
+                    type="radio"
+                    value={val}
+                    {...register('background')}
+                    className="peer sr-only"
+                  />
+                  <div className="flex items-center justify-center px-4 py-4 border border-white/20 text-gray-400 peer-checked:bg-[#32F08C] peer-checked:text-black peer-checked:border-[#32F08C] peer-checked:font-semibold transition-all hover:border-white/50 rounded-none">
+                    {val === 'IT' ? 'IT / Tech' : 'Non-IT'}
+                  </div>
+                  {/* Checkmark for selected state */}
+                  <div className="absolute top-2 right-2 opacity-0 peer-checked:opacity-100 text-black transition-opacity">
+                    <Check className="w-3 h-3" />
+                  </div>
+                </label>
+              ))}
             </div>
-            {formErrors.background && (
-              <p className="text-xs text-red-400">{formErrors.background.message}</p>
-            )}
           </div>
 
           {/* IT Role (Conditional) */}
           {background === 'IT' && (
             <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
-              <label htmlFor="itRole" className="text-sm font-medium text-gray-300">
-                Role IT
+              <label htmlFor="itRole" className="text-sm font-semibold text-white uppercase tracking-wider">
+                IT Role
               </label>
               <input
                 id="itRole"
                 {...register('itRole')}
-                className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#32F08C] focus:ring-1 focus:ring-[#32F08C] transition-colors"
-                placeholder="Contoh: Frontend Dev, Backend Dev, UI/UX"
+                className="w-full bg-transparent border border-white/20 px-4 py-4 text-white placeholder-gray-600 focus:outline-none focus:border-[#32F08C] focus:ring-1 focus:ring-[#32F08C] transition-all rounded-none"
+                placeholder="E.G. FRONTEND DEV, BACKEND DEV"
               />
               {formErrors.itRole && (
-                <p className="text-xs text-red-400">{formErrors.itRole.message}</p>
-              )}
-              {state.errors?.itRole && (
-                <p className="text-xs text-red-400">{state.errors.itRole[0]}</p>
+                <p className="text-xs text-red-400 font-mono">{formErrors.itRole.message}</p>
               )}
             </div>
           )}
 
           {/* Used TRAE */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300">
-              Sudah pernah menggunakan TRAE?
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-white uppercase tracking-wider">
+              Have you used TRAE before?
             </label>
             <div className="grid grid-cols-2 gap-4">
-              <label className="cursor-pointer">
-                <input
-                  type="radio"
-                  value="YES"
-                  {...register('usedTrae')}
-                  className="peer sr-only"
-                />
-                <div className="flex items-center justify-center px-4 py-3 bg-black/50 border border-white/10 rounded-lg text-gray-400 peer-checked:bg-[#32F08C]/10 peer-checked:border-[#32F08C] peer-checked:text-[#32F08C] transition-all hover:bg-white/5">
-                  Ya
-                </div>
-              </label>
-              <label className="cursor-pointer">
-                <input
-                  type="radio"
-                  value="NO"
-                  {...register('usedTrae')}
-                  className="peer sr-only"
-                />
-                <div className="flex items-center justify-center px-4 py-3 bg-black/50 border border-white/10 rounded-lg text-gray-400 peer-checked:bg-[#32F08C]/10 peer-checked:border-[#32F08C] peer-checked:text-[#32F08C] transition-all hover:bg-white/5">
-                  Tidak
-                </div>
-              </label>
+               {['YES', 'NO'].map((val) => (
+                <label key={val} className="cursor-pointer group relative">
+                  <input
+                    type="radio"
+                    value={val}
+                    {...register('usedTrae')}
+                    className="peer sr-only"
+                  />
+                  <div className="flex items-center justify-center px-4 py-4 border border-white/20 text-gray-400 peer-checked:bg-[#32F08C] peer-checked:text-black peer-checked:border-[#32F08C] peer-checked:font-semibold transition-all hover:border-white/50 rounded-none">
+                    {val === 'YES' ? 'Yes' : 'No'}
+                  </div>
+                </label>
+              ))}
             </div>
-            {formErrors.usedTrae && (
-              <p className="text-xs text-red-400">{formErrors.usedTrae.message}</p>
-            )}
           </div>
         </div>
 
         <button
           type="submit"
           disabled={isPending}
-          className="w-full bg-[#32F08C] hover:bg-[#2bd97c] text-black font-bold py-4 rounded-xl transition-all shadow-lg shadow-[#32F08C]/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full bg-[#32F08C] hover:bg-[#2bd97c] text-black font-semibold py-5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 rounded-none uppercase tracking-widest text-lg group"
         >
           {isPending ? (
             <>
               <Loader2 className="w-5 h-5 animate-spin" />
-              Memproses...
+              Processing...
             </>
           ) : (
-            'Dapatkan Kode Redeem'
+            'Get Redeem Code'
           )}
         </button>
       </form>
