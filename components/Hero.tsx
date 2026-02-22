@@ -79,8 +79,8 @@ export default function Hero() {
                     {Array.from({ length: 144 }).map((_, i) => (
                         <div 
                             key={i} 
-                            className={`h-2 w-2 rounded-none ${Math.random() > 0.7 ? 'bg-[#32F08C]' : 'bg-gray-800'}`}
-                            style={{ opacity: Math.random() }}
+                            className={`h-2 w-2 rounded-none ${((i * 42) % 100) > 70 ? 'bg-[#32F08C]' : 'bg-gray-800'}`}
+                            style={{ opacity: ((i * 1337) % 100) / 100 }}
                         />
                     ))}
                 </div>
