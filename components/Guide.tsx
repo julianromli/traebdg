@@ -32,7 +32,7 @@ export default function Guide() {
         <div className="grid lg:grid-cols-12 gap-8 md:gap-12">
           {/* Header Section */}
           <div className="lg:col-span-4 space-y-6 md:space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold tracking-tighter leading-[1.1]">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tighter leading-[1.1]">
               What You&apos;ll <br />
               Unlock <br />
               with <span className="text-[#32F08C]">TRAE</span>

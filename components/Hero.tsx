@@ -22,7 +22,7 @@ export default function Hero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             >
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-semibold tracking-tighter text-white leading-[1.1]">
+              <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-semibold tracking-tighter text-white leading-[1.1]">
               Redeem Your <br />
               <span className="text-[#32F08C]">TRAE PRO</span> <br />
               Benefit
